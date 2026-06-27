@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIAGRAM — Gestão Estratégica de Tráfego Pago</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --black: #0D0D0D;
+    --dark: #141414;
+    --card: #1A1A1A;
+    --border: #2A2A2A;
+    --gold: #C8906A;
+    --gold-light: #E0A880;
+    --gold-dim: rgba(200,144,106,0.12);
+    --white: #F5F0EB;
+    --muted: #8C8C8C;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 16px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(13,13,13,0.85);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; }
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: var(--black);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 1.5px solid var(--gold);
+    flex-shrink: 0;
+  }
+  .logo-icon svg { width: 20px; height: 20px; }
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--gold) !important;
+    color: var(--black) !important;
+    padding: 9px 20px;
+    border-radius: 3px;
+    font-weight: 700 !important;
+    font-family: 'Syne', sans-serif;
+  }
+  .nav-cta:hover { background: var(--gold-light) !important; }
+  .nav-burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 6px; }
+  .nav-burger span { width: 22px; height: 2px; background: var(--white); display: block; }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    padding: 130px 48px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -240px; right: -240px;
+    width: 680px; height: 680px;
+    background: radial-gradient(circle, rgba(200,144,106,0.10) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,144,106,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,144,106,0.045) 1px, transparent 1px);
+    background-size: 64px 64px;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.7) 30%, transparent 80%);
+            mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.7) 30%, transparent 80%);
+    pointer-events: none;
+  }
+  .hero-inner { display: flex; align-items: center; gap: 56px; width: 100%; position: relative; z-index: 2; }
+  .hero-content { flex: 1; max-width: 660px; }
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 28px; height: 1px;
+    background: var(--gold);
+  }
+  .hero-headline {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.1rem, 4.6vw, 4.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .hero-headline em { font-style: normal; color: var(--gold); }
+  .hero-sub {
+    font-size: 0.96rem;
+    color: var(--muted);
+    max-width: 460px;
+    line-height: 1.75;
+    margin-bottom: 38px;
+    font-weight: 400;
+  }
+  .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--black);
+    padding: 13px 28px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: background .2s, transform .15s, box-shadow .2s;
+    display: inline-block;
+    box-shadow: 0 8px 24px rgba(200,144,106,0.18);
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 28px rgba(200,144,106,0.28); }
+  .btn-ghost {
+    color: var(--white);
+    padding: 13px 28px;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    transition: border-color .2s, color .2s;
+    font-weight: 500;
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* vertical DIAGRAM signature mark, desktop hero */
+  .hero-mark {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .mark-rule { width: 1px; height: 360px; background: linear-gradient(to bottom, transparent, var(--border) 15%, var(--border) 85%, transparent); }
+  .mark-letters {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .mark-letters span {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 2.6rem;
+    line-height: 0.92;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--gold);
+    letter-spacing: -0.02em;
+    transition: color .25s, -webkit-text-stroke .25s;
+  }
+  .mark-letters span:hover { color: var(--gold); }
+
+  .ticker {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    padding: 13px 0;
+    background: var(--dark);
+  }
+  .ticker-track {
+    display: flex;
+    gap: 52px;
+    animation: tick 24s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+  .ticker-item {
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .ticker-dot { width: 4px; height: 4px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+  @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat { background: var(--black); padding: 44px 32px; text-align: center; }
+  .stat-number {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.9rem, 3vw, 2.9rem);
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .stat-label { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+
+  .section { padding: 88px 48px; }
+  .section-label {
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+    line-height: 1.12;
+    margin-bottom: 48px;
+    max-width: 540px;
+  }
+
+  /* ===== ABOUT ===== */
+  .about-section { background: var(--dark); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 72px; align-items: center; }
+  .about-text p { font-size: 0.88rem; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+  .about-text p strong { color: var(--white); font-weight: 600; }
+  .about-highlight { border-left: 2px solid var(--gold); padding-left: 18px; margin-top: 26px; }
+  .about-highlight p { font-size: 0.92rem; color: var(--white) !important; font-style: italic; margin-bottom: 0; }
+  .about-badges { display: flex; flex-direction: column; gap: 12px; }
+  .about-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 13px 18px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    transition: border-color .2s;
+  }
+  .about-badge:hover { border-color: var(--gold); }
+  .about-badge .check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--gold-dim);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+
+  /* ===== SERVICES ===== */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .service-card {
+    background: var(--card);
+    padding: 36px 28px;
+    transition: background .2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s;
+  }
+  .service-card:hover { background: #1f1f1f; }
+  .service-card:hover::after { transform: scaleX(1); }
+  .service-icon { width: 36px; height: 36px; margin-bottom: 20px; color: var(--gold); }
+  .service-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.92rem; margin-bottom: 10px; }
+  .service-desc { font-size: 0.81rem; color: var(--muted); line-height: 1.65; }
+
+  /* ===== METODOLOGIA — VERTICAL DIAGRAM ===== */
+  .etapas-section { background: var(--dark); border-top: 1px solid var(--border); }
+  .etapas-intro { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; margin-bottom: 8px; }
+  .etapas-intro .section-title { margin-bottom: 8px; }
+  .etapas-sub { font-size: 0.85rem; color: var(--muted); max-width: 320px; line-height: 1.7; padding-bottom: 4px; }
+
+  .diagram-vertical {
+    margin-top: 44px;
+    position: relative;
+  }
+  .diagram-vertical::before {
+    content: '';
+    position: absolute;
+    left: 38px;
+    top: 12px;
+    bottom: 12px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--gold) 0%, var(--border) 100%);
+  }
+  .diagram-step {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+    padding: 26px 0;
+    position: relative;
+  }
+  .diagram-step + .diagram-step { border-top: 1px solid var(--border); }
+  .diagram-letter-wrap {
+    width: 76px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+  .diagram-letter {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: var(--black);
+    background: var(--gold);
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+  .diagram-body { flex: 1; padding-top: 6px; }
+  .diagram-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--white);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .diagram-title .step-no { font-size: 0.65rem; color: var(--gold); letter-spacing: 0.1em; font-weight: 600; }
+  .diagram-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.7; max-width: 560px; }
+
+  /* ===== RESULTS ===== */
+  .results-section { border-top: 1px solid var(--border); }
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .result-card { background: var(--card); padding: 34px 30px; }
+  .result-tag { font-size: 0.63rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 14px; }
+  .result-metric { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 8px; }
+  .result-val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.35rem; color: var(--white); line-height: 1; }
+  .result-key { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 4px; }
+  .result-note { font-size: 0.78rem; color: var(--muted); margin-top: 12px; line-height: 1.55; }
+
+  /* ===== CTA ===== */
+  .cta-section {
+    padding: 100px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 820px; height: 420px;
+    background: radial-gradient(ellipse, rgba(200,144,106,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section .section-title { max-width: 100%; font-size: clamp(1.5rem, 3.5vw, 2.9rem); margin-bottom: 16px; }
+  .cta-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 38px; }
+
+  /* ===== CONTACT ===== */
+  .contact-section {
+    background: var(--dark);
+    padding: 70px 48px;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .contact-info h3 { font-family: 'Syne', sans-serif; font-size: 1.35rem; font-weight: 800; margin-bottom: 28px; }
+  .contact-item {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 16px;
+    text-decoration: none;
+    color: inherit;
+    transition: color .2s;
+  }
+  .contact-item:hover { color: var(--gold); }
+  .contact-item-icon {
+    width: 38px; height: 38px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold);
+    flex-shrink: 0;
+    transition: border-color .2s;
+  }
+  .contact-item:hover .contact-item-icon { border-color: var(--gold); }
+  .contact-label { font-size: 0.67rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .contact-value { font-size: 0.87rem; font-weight: 500; }
+  .contact-form-embed { background: var(--card); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .contact-form-embed iframe { width: 100%; min-height: 460px; border: none; display: block; }
+
+  footer {
+    padding: 26px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.68rem;
+    color: var(--muted);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--gold); }
+
+  /* WHATSAPP FLOAT */
+  .wa-float {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+  .wa-tooltip {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 7px 13px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(8px);
+    transition: opacity .25s, transform .25s;
+    pointer-events: none;
+  }
+  .wa-float:hover .wa-tooltip { opacity: 1; transform: translateX(0); }
+  .wa-btn {
+    width: 56px; height: 56px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.35);
+    transition: transform .2s, box-shadow .2s;
+    position: relative;
+  }
+  .wa-btn:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(37,211,102,0.5); }
+  .wa-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background: rgba(37,211,102,0.3);
+    animation: wa-pulse 2.5s ease-out infinite;
+  }
+  @keyframes wa-pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(1.75); opacity: 0; }
+  }
+  .wa-btn svg { width: 28px; height: 28px; position: relative; z-index: 1; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1100px) {
+    .hero-mark { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 36px; }
+  }
+  @media (max-width: 900px) {
+    nav { padding: 14px 20px; }
+    .nav-links { position: fixed; top: 64px; left: 0; right: 0; background: var(--dark); border-bottom: 1px solid var(--border); flex-direction: column; align-items: flex-start; gap: 0; padding: 8px 20px 18px; display: none; }
+    .nav-links.open { display: flex; }
+    .nav-links li { width: 100%; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .nav-links li:last-child { border-bottom: none; padding-top: 16px; }
+    .nav-cta { display: inline-block; }
+    .nav-burger { display: flex; }
+    .hero { padding: 96px 20px 48px; min-height: auto; }
+    .hero-inner { flex-direction: column; }
+    .stats { grid-template-columns: 1fr; }
+    .section { padding: 56px 20px; }
+    .section-title { margin-bottom: 36px; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .results-grid { grid-template-columns: 1fr; }
+    .contact-section { grid-template-columns: 1fr; gap: 36px; padding: 56px 20px; }
+    .cta-section { padding: 68px 20px; }
+    footer { flex-direction: column; gap: 10px; text-align: center; padding: 22px 20px; }
+    .wa-float { bottom: 18px; right: 18px; }
+    .etapas-intro { flex-direction: column; align-items: flex-start; }
+    .diagram-vertical::before { left: 28px; }
+    .diagram-letter-wrap { width: 56px; }
+    .diagram-letter { width: 48px; height: 48px; font-size: 1.9rem; }
+    .diagram-step { gap: 18px; }
+  }
+  @media (max-width: 560px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .hero-headline { font-size: clamp(1.9rem, 8vw, 2.6rem); }
+    .diagram-title { flex-direction: column; gap: 2px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="2" y="12" width="4" height="8" rx="0.5" fill="#C8906A"/>
+        <rect x="10" y="8" width="4" height="12" rx="0.5" fill="#C8906A"/>
+        <rect x="18" y="4" width="4" height="16" rx="0.5" fill="#C8906A"/>
+        <path d="M1 5V2h3" stroke="#C8906A" stroke-width="1.2" stroke-linecap="square" fill="none"/>
+        <path d="M23 5V2h-3" stroke="#C8906A" stroke-width="1.2" stroke-linecap="square" fill="none"/>
+        <path d="M1 19v3h3" stroke="#C8906A" stroke-width="1.2" stroke-linecap="square" fill="none"/>
+        <path d="M23 19v3h-3" stroke="#C8906A" stroke-width="1.2" stroke-linecap="square" fill="none"/>
+      </svg>
+    </div>
+    <span class="logo-text">Diagram</span>
+  </div>
+  <button class="nav-burger" id="burger" aria-label="Abrir menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#metodologia">Metodologia</a></li>
+    <li><a href="#resultados">Resultados</a></li>
+    <li><a href="https://tally.so/r/wgg0Ml" target="_blank" class="nav-cta">Diagnóstico grátis</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Agência de Tráfego Pago — Brasília/DF</div>
+      <h1 class="hero-headline">
+        Seu investimento em anúncios<br><em>trabalhando de volta</em>
+      </h1>
+      <p class="hero-sub">Gerenciamos campanhas no Google e Meta para transformar cliques em clientes reais — com estratégia, dados e resultado mensurável.</p>
+      <div class="hero-actions">
+        <a href="https://tally.so/r/wgg0Ml" target="_blank" class="btn-primary">Diagnóstico gratuito</a>
+        <a href="#servicos" class="btn-ghost">Ver serviços</a>
+      </div>
+    </div>
+    <div class="hero-mark">
+      <div class="mark-rule"></div>
+      <div class="mark-letters">
+        <span>D</span><span>I</span><span>A</span><span>G</span><span>R</span><span>A</span><span>M</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item"><span class="ticker-dot"></span>Google Ads</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Meta Ads</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Remarketing</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Funil de Vendas</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>ROI Mensurável</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Tráfego Pago</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Design para Mídias</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Identidade Visual</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Performance</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Google Ads</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Meta Ads</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Remarketing</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Funil de Vendas</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>ROI Mensurável</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Tráfego Pago</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Design para Mídias</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Identidade Visual</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Performance</span>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-number">+3×</div>
+    <div class="stat-label">Retorno médio sobre investimento</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">2021</div>
+    <div class="stat-label">Atuando no mercado digital</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">R$1M+</div>
+    <div class="stat-label">Em verba gerenciada</div>
+  </div>
+</div>
+
+<section class="section about-section" id="sobre">
+  <div class="about-grid">
+    <div class="about-text">
+      <div class="section-label">Quem somos</div>
+      <h2 class="section-title">Estratégia que transforma presença em conversão</h2>
+      <p>A <strong>DIAGRAM</strong>, atuante desde 2021, destaca-se como líder em anúncios online e vendas. Especializada em potencializar alcance e vendas para pequenas e médias empresas, adotamos a <strong>Gestão Estratégica de Tráfego Digital</strong>, focando em decisões baseadas em dados.</p>
+      <p>Nossa missão é proporcionar resultados que transcendam a simples geração de tráfego, com estratégias personalizadas para impulsionar o crescimento e a visibilidade online dos nossos clientes.</p>
+      <div class="about-highlight">
+        <p>Mais que uma agência digital, construímos estratégias que transformam presenças em conversão.</p>
+      </div>
+    </div>
+    <div class="about-badges">
+      <div class="about-badge"><span class="check">✓</span> Decisões baseadas em dados reais</div>
+      <div class="about-badge"><span class="check">✓</span> Estratégias personalizadas por nicho</div>
+      <div class="about-badge"><span class="check">✓</span> Acompanhamento de leads diário</div>
+      <div class="about-badge"><span class="check">✓</span> Design para todas as mídias</div>
+      <div class="about-badge"><span class="check">✓</span> Identidade visual e impressos</div>
+      <div class="about-badge"><span class="check">✓</span> Relatórios e reuniões mensais</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="servicos">
+  <div class="section-label">O que fazemos</div>
+  <h2 class="section-title">Soluções pensadas para gerar vendas</h2>
+  <div class="services-grid">
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none">
+        <rect x="4" y="22" width="6" height="14" rx="1" fill="currentColor" opacity="0.5"/>
+        <rect x="17" y="14" width="6" height="22" rx="1" fill="currentColor" opacity="0.75"/>
+        <rect x="30" y="6" width="6" height="30" rx="1" fill="currentColor"/>
+      </svg>
+      <div class="service-name">Google Ads</div>
+      <p class="service-desc">Campanhas de busca, display e shopping otimizadas para capturar quem já está procurando o que você vende.</p>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="14" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M20 8 C24 14 28 20 20 32 C12 20 16 14 20 8Z" fill="currentColor" opacity="0.4"/>
+        <circle cx="20" cy="20" r="3" fill="currentColor"/>
+      </svg>
+      <div class="service-name">Meta Ads</div>
+      <p class="service-desc">Anúncios no Facebook e Instagram com segmentação avançada para alcançar o cliente certo no momento certo.</p>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none">
+        <path d="M8 32 L16 20 L24 26 L32 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="32" cy="10" r="3" fill="currentColor"/>
+      </svg>
+      <div class="service-name">Gestão de Anúncios</div>
+      <p class="service-desc">Monitoramento contínuo, testes A/B e otimização de criativos para que seu orçamento renda cada vez mais.</p>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none">
+        <rect x="4" y="6" width="32" height="24" rx="2" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M10 18 L14 14 L18 18 L24 12 L30 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="service-name">Design para Mídias</div>
+      <p class="service-desc">Feed personalizado, criativos e peças visuais que refletem a essência da sua marca e convertem.</p>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none">
+        <path d="M8 20 C8 13 13 8 20 8 C27 8 32 13 32 20 C32 27 27 32 20 32" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M20 32 L16 28 L20 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="20" cy="20" r="3" fill="currentColor"/>
+      </svg>
+      <div class="service-name">Funil de Conversão</div>
+      <p class="service-desc">Estratégia completa do topo ao fundo do funil, do primeiro clique até o fechamento da venda.</p>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none">
+        <rect x="6" y="4" width="12" height="16" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
+        <rect x="22" y="4" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
+        <rect x="22" y="20" width="12" height="16" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
+        <rect x="6" y="26" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+      <div class="service-name">Identidade Visual</div>
+      <p class="service-desc">Logos, impressos e identidade visual que posicionam sua marca no digital e no mundo físico.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section etapas-section" id="metodologia">
+  <div class="etapas-intro">
+    <div>
+      <div class="section-label">Nossa metodologia</div>
+      <h2 class="section-title">A jornada DIAGRAM — planejada em detalhes</h2>
+    </div>
+    <p class="etapas-sub">Cada letra do nosso nome representa uma etapa do processo que aplicamos em todo cliente, do diagnóstico ao monitoramento contínuo de resultados.</p>
+  </div>
+
+  <div class="diagram-vertical">
+    <div class="diagram-step">
+      <div class="diagram-letter-wrap"><div class="diagram-letter">D</div></div>
+      <div class="diagram-body">
+        <div class="diagram-title">Diagnóstico <span class="step-no">01 / 07</span></div>
+        <p class="diagram-desc">Análise completa do cenário atual da sua presença digital e mercado.</p>
+      </div>
+    </div>
+    <div class="diagram-step">
+      <div class="diagram-letter-wrap"><div class="diagram-letter">I</div></div>
+      <div class="diagram-body">
+        <div class="diagram-title">Implementação <span class="step-no">02 / 07</span></div>
+        <p class="diagram-desc">Implantação de CRMs, fluxos de trabalho e automação de processos comerciais.</p>
+      </div>
+    </div>
+    <div class="diagram-step">
+      <div class="diagram-letter-wrap"><div class="diagram-letter">A</div></div>
+      <div class="diagram-body">
+        <div class="diagram-title">Análise Estratégica <span class="step-no">03 / 07</span></div>
+        <p class="diagram-desc">Desenvolvimento de estratégias personalizadas baseadas no diagnóstico do seu negócio.</p>
+      </div>
+    </div>
+    <div class="diagram-step">
+      <div class="diagram-letter-wrap"><div class="diagram-letter">G</div></div>
+      <div class="diagram-body">
+        <div class="diagram-title">Gestão de Conversão <span class="step-no">04 / 07</span></div>
+        <p class="diagram-desc">Implementação nos canais selecionados para otimizar cada conversão.</p>
+      </div>
+    </div>
+    <div class="diagram-step">
+      <div class="diagram-letter-wrap"><div class="diagram-letter">R</div></div>
+      <div class="diagram-body">
+        <div class="diagram-title">Revisão de Indicadores <span class="step-no">05 / 07</span></div>
+        <p class="diagram-desc">Análise contínua de dados para ajustes estratégicos em tempo real.</p>
+      </div>
+    </div>
+    <div class="diagram-step">
+      <div class="diagram-letter-wrap"><div class="diagram-letter">A</div></div>
+      <div class="diagram-body">
+        <div class="diagram-title">Aprimoramento <span class="step-no">06 / 07</span></div>
+        <p class="diagram-desc">Treinamentos e capacitação comercial para melhor desempenho das equipes.</p>
+      </div>
+    </div>
+    <div class="diagram-step">
+      <div class="diagram-letter-wrap"><div class="diagram-letter">M</div></div>
+      <div class="diagram-body">
+        <div class="diagram-title">Monitoramento <span class="step-no">07 / 07</span></div>
+        <p class="diagram-desc">Relatórios mensais e reuniões estratégicas para avaliação contínua dos resultados.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section results-section" id="resultados">
+  <div class="section-label">Resultados reais</div>
+  <h2 class="section-title">Campanhas que comprovam o ROI</h2>
+  <div class="results-grid">
+    <div class="result-card">
+      <div class="result-tag">Meta Ads — Campanha de Conversão · Jan 2025</div>
+      <div class="result-metric">
+        <div><div class="result-val">199</div><div class="result-key">Conversões</div></div>
+        <div><div class="result-val">R$ 444</div><div class="result-key">Investimento</div></div>
+        <div><div class="result-val">R$ 2,23</div><div class="result-key">Custo/conversão</div></div>
+        <div><div class="result-val">R$ 3.000</div><div class="result-key">Retorno</div></div>
+      </div>
+      <p class="result-note">3.520 impressões. Objetivo: vendas.</p>
+    </div>
+    <div class="result-card">
+      <div class="result-tag">Google Ads — Campanha de Conversão · Jan 2025</div>
+      <div class="result-metric">
+        <div><div class="result-val">118</div><div class="result-key">Conversões</div></div>
+        <div><div class="result-val">R$ 400</div><div class="result-key">Investimento</div></div>
+        <div><div class="result-val">R$ 2,26</div><div class="result-key">Custo/conversão</div></div>
+        <div><div class="result-val">R$ 5.000</div><div class="result-key">Retorno</div></div>
+      </div>
+      <p class="result-note">10.243 acessos gerados. CTR de 2,91%.</p>
+    </div>
+    <div class="result-card">
+      <div class="result-tag">Facebook Ads — Campanhas de Leads</div>
+      <div class="result-metric">
+        <div><div class="result-val">R$ 38k+</div><div class="result-key">Verba único cliente</div></div>
+        <div><div class="result-val">925k+</div><div class="result-key">Impressões</div></div>
+        <div><div class="result-val">474k+</div><div class="result-key">Alcance</div></div>
+      </div>
+      <p class="result-note">Múltiplos conjuntos de anúncios e públicos segmentados.</p>
+    </div>
+    <div class="result-card" style="background: var(--gold-dim); border-left: 2px solid var(--gold);">
+      <div class="result-tag" style="color: var(--gold-light);">Próximo caso de sucesso</div>
+      <p style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:10px;">Vamos construir sua campanha juntos.</p>
+      <p class="result-note" style="margin-bottom:22px;">Diagnóstico gratuito para entender seu cenário e apresentar a estratégia ideal para o seu negócio.</p>
+      <a href="https://tally.so/r/wgg0Ml" target="_blank" class="btn-primary">Quero meu diagnóstico</a>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="section-label">Vamos conversar</div>
+  <h2 class="section-title">Pronto para crescer com anúncios que funcionam?</h2>
+  <p class="cta-sub">Diagnóstico gratuito para descobrir onde seu investimento pode render mais.</p>
+  <a href="https://tally.so/r/wgg0Ml" target="_blank" class="btn-primary">Quero meu diagnóstico grátis</a>
+</section>
+
+<section class="contact-section" id="contato">
+  <div class="contact-info">
+    <h3>Fale com a Diagram</h3>
+    <a href="https://wa.me/5561991515741" target="_blank" class="contact-item">
+      <div class="contact-item-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M6.6 10.8C7.4 12.4 9 14 10.4 14.8L11.6 13.6C11.8 13.4 12.1 13.4 12.3 13.5C13.2 13.9 14.2 14.1 15.2 14.1C15.6 14.1 15.9 14.4 15.9 14.8V17.1C15.9 17.5 15.6 17.8 15.2 17.8C8.6 17.8 3.2 12.4 3.2 5.8C3.2 5.4 3.5 5.1 3.9 5.1H6.2C6.6 5.1 6.9 5.4 6.9 5.8C6.9 6.8 7.1 7.8 7.5 8.7C7.6 8.9 7.6 9.2 7.4 9.4L6.6 10.8Z" fill="currentColor"/>
+          <path d="M12 2C6.48 2 2 6.48 2 12C2 13.85 2.52 15.58 3.43 17.05L2 22L7.05 20.57C8.48 21.44 10.18 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <div>
+        <div class="contact-label">WhatsApp</div>
+        <div class="contact-value">+55 61 9151-5741</div>
+      </div>
+    </a>
+    <a href="https://www.instagram.com/diagrammkt/" target="_blank" class="contact-item">
+      <div class="contact-item-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+        </svg>
+      </div>
+      <div>
+        <div class="contact-label">Instagram</div>
+        <div class="contact-value">@diagrammkt</div>
+      </div>
+    </a>
+    <a href="https://tally.so/r/wgg0Ml" target="_blank" class="contact-item">
+      <div class="contact-item-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M4 4H20V16H4V4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M8 20H16M12 16V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="contact-label">Diagnóstico online</div>
+        <div class="contact-value">Preencha o formulário</div>
+      </div>
+    </a>
+  </div>
+  <div class="contact-form-embed">
+    <iframe src="https://tally.so/embed/wgg0Ml?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" title="Diagnóstico Gratuito — Diagram" loading="lazy"></iframe>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.82rem;letter-spacing:0.1em;color:var(--white)">DIAGRAM</span>
+    <span style="margin-left:12px">Assessoria de Marketing e Publicidade</span>
+  </div>
+  <div>
+    CNPJ 53.663.071/0001-30 &nbsp;·&nbsp;
+    <a href="https://www.instagram.com/diagrammkt/" target="_blank">Instagram</a> &nbsp;·&nbsp;
+    <a href="https://wa.me/5561991515741" target="_blank">WhatsApp</a>
+  </div>
+</footer>
+
+<div class="wa-float">
+  <div class="wa-tooltip">💬 Fale conosco agora!</div>
+  <a href="https://wa.me/5561991515741?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20saber%20mais%20sobre%20tr%C3%A1fego%20pago." target="_blank" class="wa-btn" aria-label="Conversar no WhatsApp">
+    <svg viewBox="0 0 32 32" fill="none">
+      <path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.668 4.61 1.819 6.5L4 29l7.688-1.799A12.94 12.94 0 0016 28c6.627 0 12-5.373 12-12S22.627 3 16 3z" fill="white"/>
+      <path d="M22.406 19.479c-.301-.15-1.777-.876-2.053-.976-.275-.1-.476-.15-.676.15-.2.3-.775.975-.95 1.176-.175.2-.35.225-.65.075-.301-.15-1.27-.469-2.42-1.49-.894-.795-1.496-1.775-1.672-2.075-.175-.3-.019-.462.132-.61.135-.132.3-.344.45-.519.15-.175.2-.3.3-.5.1-.2.05-.375-.025-.525-.075-.15-.675-1.625-.925-2.225-.243-.585-.49-.505-.676-.514a12.07 12.07 0 00-.574-.011c-.2 0-.525.075-.8.375-.275.3-1.05 1.025-1.05 2.5s1.075 2.9 1.225 3.1c.15.2 2.112 3.225 5.12 4.52.715.31 1.273.494 1.708.633.717.228 1.37.196 1.886.119.575-.086 1.777-.727 2.026-1.428.25-.7.25-1.3.175-1.426-.075-.125-.275-.2-.575-.35z" fill="#25D366"/>
+    </svg>
+  </a>
+</div>
+
+<script>
+  document.getElementById('burger').addEventListener('click', function() {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  document.querySelectorAll('#navLinks a').forEach(function(a) {
+    a.addEventListener('click', function() { document.getElementById('navLinks').classList.remove('open'); });
+  });
+</script>
+
+</body>
+</html>
